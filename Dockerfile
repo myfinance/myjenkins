@@ -14,9 +14,8 @@ RUN /usr/local/bin/install-plugins.sh workflow-aggregator && \
     /usr/local/bin/install-plugins.sh kubernetes-cli 
 
 # install Maven, Java, Docker
-RUN apk add --no-cache maven \
-    openjdk8 \
-    docker 
+RUN apk add docker \
+    gettext
 
 # Kubectl
 RUN  wget https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
