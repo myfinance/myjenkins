@@ -144,3 +144,47 @@ spec:
   selector:
     app: jenkins
 ---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nexus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+        - name: nexus
+          image: sonatype/nexus3:3.22.0
+          ports:
+            - name: nexus-port
+              containerPort: 8081
+          volumeMounts:
+            - name: nexusdata
+              mountPath: /nexus-data
+      volumes:
+        - name: nexusdata
+          persistentVolumeClaim:
+              claimName: nexuspvc 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+    - name: ui
+      port: 8081
+      nodePort: 31001
+  selector:
+    app: nexus              
