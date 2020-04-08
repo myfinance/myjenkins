@@ -12,5 +12,5 @@ on the kubernetes server. there is no git installed but you can clone this repo 
 
 ## config
 
-add the github credantials with id github: Jenkins-Zugangsdaten-System-Globale Zugangsdaten 
+add the github credantials with id github. use your token for the password: Jenkins-Zugangsdaten-System-Globale Zugangsdaten 
 github organization anlegen
