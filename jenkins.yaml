@@ -169,6 +169,8 @@ spec:
           ports:
             - name: nexus-port
               containerPort: 8081
+            - name: dockerrepo-port
+              containerPort: 31002              
           volumeMounts:
             - name: nexusdata
               mountPath: /nexus-data
@@ -190,4 +192,22 @@ spec:
       port: 8081
       nodePort: 31001
   selector:
-    app: nexus              
+    app: nexus 
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexusdocker
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+    - name: ui
+      port: 31002
+      nodePort: 31003
+  selector:
+    app: nexus     
+
+               
