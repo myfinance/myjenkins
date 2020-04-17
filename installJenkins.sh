@@ -1,2 +1,2 @@
-docker image build -t myjenkins jenkins/.
-kubectl apply -f ./jenkins.yaml
+docker image build -t myjenkins .
+helm install myjenkins ./helm/myjenkins

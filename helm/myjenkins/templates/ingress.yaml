@@ -1,0 +1,42 @@
+{{- if .Values.ingress.enabled -}}
+{{- $jenkinsPort := .Values.jenkins.port -}}
+{{- $jenkinsServiceName := .Values.jenkins.servicename -}}
+{{- $nexusPort := .Values.nexus.port -}}
+{{- $nexusServiceName := .Values.nexus.servicename -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  {{- range .Values.ingress.jenkins_hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $jenkinsServiceName }}
+              servicePort: {{ $jenkinsPort }}
+        {{- end }}
+  {{- end }}
+  {{- range .Values.ingress.nexus_hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $nexusServiceName }}
+              servicePort: {{ $nexusPort }}
+        {{- end }}
+  {{- end }}  
+
+{{- end }}
+

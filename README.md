@@ -10,6 +10,8 @@ run:
 ./installJenkins.sh
 on the kubernetes server. there is no git installed but you can clone this repo from the dev-server to the share /mnt/data/repo and run it there from host kubernetes
 
+run ./upgradejenkins.sh in case there is already an vesion of myjenkins installed
+
 ## config
 
 add the github credantials with id github. use your token for the password: Jenkins-Zugangsdaten-System-Globale Zugangsdaten 

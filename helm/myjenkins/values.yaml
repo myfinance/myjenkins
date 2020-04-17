@@ -1,0 +1,52 @@
+# Default values for mfbackend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+#use the local image. Nexus is not available yet
+  jenkins: myjenkins:latest
+  nexus: sonatype/nexus3:3.22.0
+  pullPolicy: Never
+
+pv:
+  nexuspvc: nexuspvc
+  nexusstorage: /mnt/data/nexus/
+  nexusstoragesize: 10Gi
+  jenkinsstorage: /mnt/data/jenkins-store
+  jenkinspvc: jenkinspvc
+  jenkinsstoragesize: 10Gi
+
+jenkins:
+  docker_sock_path: /var/run/docker.sock  
+  port: 8080
+  port_ext: 31000
+  jnlp_port: 50000
+  servicename: jenkins
+
+nexus:
+  docker_sock_path: /var/run/docker.sock  
+  port: 8081
+  port_ext: 31001
+  dockerrepo_port: 31002  
+  dockerrepo_ext_port: 31003
+  servicename: nexus
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  name:  jenkins
+  clusterrole: jenkinsclusterrole
+  clusterrolebinding: jenkins-crb
+
+ingress:
+  enabled: true
+  name: myjenkins
+  jenkins_hosts:
+    - host: jenkins.mylocaldomain
+      paths: [/]
+  nexus_hosts:
+    - host: nexus.mylocaldomain
+      paths: [/]      
+

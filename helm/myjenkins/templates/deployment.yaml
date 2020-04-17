@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: {{ .Values.image.jenkins }}
+          env:
+            - name: JAVA_OPTS
+              value: -Djenkins.install.runSetupWizard=false
+          ports:
+            - name: http-port
+              containerPort: {{ .Values.jenkins.port }}
+            - name: jnlp-port
+              containerPort: {{ .Values.jenkins.jnlp_port }}
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: docker-sock-volume
+              mountPath: "/var/run/docker.sock"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+      volumes:
+        # This allows jenkins to use the docker daemon on the host, for running builds
+        # see https://stackoverflow.com/questions/27879713/is-it-ok-to-run-docker-from-inside-docker
+        - name: docker-sock-volume
+          hostPath:
+            path: {{ .Values.jenkins.docker_sock_path }}
+        - name: jenkins-home
+          persistentVolumeClaim:
+              claimName: {{ .Values.pv.jenkinspvc }}  
+      serviceAccountName: {{ .Values.serviceAccount.name }}  
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nexus
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+        - name: nexus
+          image: "{{ .Values.image.nexus }}"
+          ports:
+            - name: nexus-port
+              containerPort: {{ .Values.nexus.port }}
+            - name: dockerrepo-port
+              containerPort: {{ .Values.nexus.dockerrepo_port }}              
+          volumeMounts:
+            - name: nexusdata
+              mountPath: /nexus-data
+      volumes:
+        - name: nexusdata
+          persistentVolumeClaim:
+              claimName: {{ .Values.pv.nexuspvc }} 
