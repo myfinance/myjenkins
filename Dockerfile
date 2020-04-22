@@ -19,6 +19,7 @@ RUN apk add docker \
 
 # Kubectl
 RUN  wget https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+RUN curl -s https://get.helm.sh/helm-v3.1.0-linux-amd64.tar.gz | tar xvz -C /tmp && cp /tmp/linux-amd64/helm /usr/local/bin/helm
 
 # Need to ensure the gid here matches the gid on the host node. We ASSUME (hah!) this
 # will be stable....keep an eye out for unable to connect to docker.sock in the builds
