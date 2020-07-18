@@ -45,3 +45,19 @@ spec:
       nodePort: {{ .Values.nexus.dockerrepo_ext_port }}
   selector:
     app: nexus    
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonar
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+    - name: ui
+      port: {{ .Values.sonar.port }}
+      nodePort: {{ .Values.sonar.port_ext }}
+  selector:
+    app: sonar       

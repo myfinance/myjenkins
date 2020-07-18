@@ -55,3 +55,93 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pv.jenkinsstoragesize }}   
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarstorage
+spec:
+  storageClassName: sonarstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.pv.sonarstoragesize }}   
+  hostPath:
+    path: {{ .Values.pv.sonarstorage }}/data
+    type: DirectoryOrCreate 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pv.sonarpvc }}
+spec:
+  storageClassName: sonarstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pv.sonarstoragesize }}    
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarlogsstorage
+spec:
+  storageClassName: sonarlogsstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.pv.sonarstoragesize }}   
+  hostPath:
+    path: {{ .Values.pv.sonarstorage }}/logs
+    type: DirectoryOrCreate 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pv.sonarlogspvc }}
+spec:
+  storageClassName: sonarlogsstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pv.sonarstoragesize }}    
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarextstorage
+spec:
+  storageClassName: sonarextstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.pv.sonarstoragesize }}   
+  hostPath:
+    path: {{ .Values.pv.sonarstorage }}/ext
+    type: DirectoryOrCreate 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pv.sonarextpvc }}
+spec:
+  storageClassName: sonarextstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pv.sonarstoragesize }}             

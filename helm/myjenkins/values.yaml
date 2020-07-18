@@ -8,6 +8,7 @@ image:
 #use the local image. Nexus is not available yet
   jenkins: myjenkins:latest
   nexus: sonatype/nexus3:3.22.0
+  sonar: sonarqube:8.4.1-community
   pullPolicy: Never
 
 pv:
@@ -17,6 +18,11 @@ pv:
   jenkinsstorage: /mnt/data/jenkins-store
   jenkinspvc: jenkinspvc
   jenkinsstoragesize: 10Gi
+  sonarpvc: sonarpvc
+  sonarlogspvc: sonarlogspvc
+  sonarextpvc: sonarextpvc
+  sonarstorage: /opt/elastic/sonar/
+  sonarstoragesize: 10Gi  
 
 jenkins:
   docker_sock_path: /var/run/docker.sock  
@@ -26,12 +32,17 @@ jenkins:
   servicename: jenkins
 
 nexus:
-  docker_sock_path: /var/run/docker.sock  
   port: 8081
   port_ext: 31001
   dockerrepo_port: 31002  
   dockerrepo_ext_port: 31003
   servicename: nexus
+
+sonar:
+  port: 9000
+  port_ext: 31004
+  servicename: sonar
+
 
 serviceAccount:
   # Specifies whether a service account should be created
