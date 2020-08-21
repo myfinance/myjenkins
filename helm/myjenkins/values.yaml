@@ -38,12 +38,6 @@ nexus:
   dockerrepo_ext_port: 31003
   servicename: nexus
 
-sonar:
-  port: 9000
-  port_ext: 31004
-  servicename: sonar
-
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
